@@ -20,11 +20,11 @@ public class MenuScreen implements Screen {
 	public MenuScreen(Box2DTutorial box2dTutorial){
 		parent = box2dTutorial; // setting the argument to our field.
 		stage = new Stage(new ScreenViewport());
-		Gdx.input.setInputProcessor(stage);
 	}
 	
 	@Override
 	public void show() {
+		Gdx.input.setInputProcessor(stage);
 		Table table = new Table();
 		table.setFillParent(true);
 		table.setDebug(true);

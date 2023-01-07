@@ -1,8 +1,6 @@
 package com.gamesugs.box2dtutorial;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gamesugs.box2dtutorial.views.EndScreen;
 import com.gamesugs.box2dtutorial.views.LoadingScreen;
 import com.gamesugs.box2dtutorial.views.MainScreen;
@@ -10,14 +8,14 @@ import com.gamesugs.box2dtutorial.views.MenuScreen;
 import com.gamesugs.box2dtutorial.views.PreferencesScreen;
 
 public class Box2DTutorial extends Game {
-	SpriteBatch batch;
-	Texture img;
+	
 	
 	private LoadingScreen loadingScreen;
 	private PreferencesScreen preferencesScreen;
 	private MenuScreen menuScreen;
 	private MainScreen mainScreen;
 	private EndScreen endScreen;
+	private AppPreferences options;
 	 
 	public final static int MENU = 0;
 	public final static int PREFERENCES = 1;
@@ -26,6 +24,7 @@ public class Box2DTutorial extends Game {
 	
 	@Override
 	public void create () {
+		options = new AppPreferences();
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
 	}
@@ -50,5 +49,9 @@ public class Box2DTutorial extends Game {
 			break;
 			default: System.out.println("Something went wrong");
 		}
+	}
+
+	public AppPreferences getPreferences() {
+		return this.options;			
 	}
 }
