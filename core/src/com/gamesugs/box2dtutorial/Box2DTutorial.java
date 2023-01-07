@@ -1,6 +1,8 @@
 package com.gamesugs.box2dtutorial;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.gamesugs.box2dtutorial.views.EndScreen;
 import com.gamesugs.box2dtutorial.views.LoadingScreen;
 import com.gamesugs.box2dtutorial.views.MainScreen;
@@ -15,7 +17,8 @@ public class Box2DTutorial extends Game {
 	private MenuScreen menuScreen;
 	private MainScreen mainScreen;
 	private EndScreen endScreen;
-	private AppPreferences options;
+	private AppPreferences preferences;
+
 	 
 	public final static int MENU = 0;
 	public final static int PREFERENCES = 1;
@@ -24,9 +27,10 @@ public class Box2DTutorial extends Game {
 	
 	@Override
 	public void create () {
-		options = new AppPreferences();
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
+		preferences = new AppPreferences();
+
 	}
 	
 	public void changeScreen(int screen) {
@@ -50,8 +54,8 @@ public class Box2DTutorial extends Game {
 			default: System.out.println("Something went wrong");
 		}
 	}
-
-	public AppPreferences getPreferences() {
-		return this.options;			
+	public AppPreferences getPreferences(){
+		return preferences;
+		
 	}
 }

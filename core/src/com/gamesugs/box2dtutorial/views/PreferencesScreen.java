@@ -41,7 +41,7 @@ public class PreferencesScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		Table table = new Table();
 		table.setFillParent(true);
-//		table.setDebug(true);
+		table.setDebug(false);
 		stage.addActor(table);
 		Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 
@@ -108,16 +108,16 @@ public class PreferencesScreen implements Screen {
 			
 		table.add(titleLabel).colspan(2);
 		table.row().pad(10,0,0,10);
-		table.add(volumeMusicLabel);
+		table.add(volumeMusicLabel).left();
 		table.add(volumeMusicSlider);
 		table.row().pad(10,0,0,10);
-		table.add(musicOnOffLabel);
+		table.add(musicOnOffLabel).left();
 		table.add(musicCheckbox);
 		table.row().pad(10,0,0,10);
-		table.add(volumeSoundLabel);
+		table.add(volumeSoundLabel).left();
 		table.add(volumeSoundSlider);
 		table.row().pad(10,0,0,10);
-		table.add(soundOnOffLabel);
+		table.add(soundOnOffLabel).left();
 		table.add(soundCheckbox);
 		table.row().pad(10,0,0,10);
 		table.add(backButton).colspan(2);
