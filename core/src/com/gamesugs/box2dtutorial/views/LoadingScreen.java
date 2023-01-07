@@ -1,9 +1,17 @@
 package com.gamesugs.box2dtutorial.views;
 
 import com.badlogic.gdx.Screen;
+import com.gamesugs.box2dtutorial.Box2DTutorial;
 
 public class LoadingScreen implements Screen {
 
+	private Box2DTutorial parent; // a field to store our orchestrator
+
+	// our constructor with a Box2DTutorial argument
+	public LoadingScreen(Box2DTutorial box2dTutorial){
+		parent = box2dTutorial;     // setting the argument to our field.
+	}
+	
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -12,8 +20,7 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
-
+		parent.changeScreen(Box2DTutorial.MENU);
 	}
 
 	@Override
