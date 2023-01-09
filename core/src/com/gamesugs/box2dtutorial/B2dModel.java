@@ -1,12 +1,15 @@
 package com.gamesugs.box2dtutorial;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.gamesugs.box2dtutorial.controller.KeyboardController;
 
 public class B2dModel {
 
@@ -14,37 +17,61 @@ public class B2dModel {
 	private Body bodyd;
 	private Body bodys;
 	private Body bodyk;
+	public Body player;
+	public boolean isSwimming = false;
+	private KeyboardController controller;
+	private OrthographicCamera camera;
 	
-	
-	public B2dModel() {
+	public B2dModel(KeyboardController contr, OrthographicCamera cam) {
+		controller=contr;
+		camera=cam;
 		world = new World(new Vector2(0,-10f),true);
+		world.setContactListener(new B2dContactListener(this));
 		createFloor();
-		createObject();
-		createKinematicObject();
-		
+		//createObject();
+		//createMovingObject();
+			
+		// get our body factory singleton and store it in bodyFactory
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
-		
-		// add a new rubber ball at position 1, 1
-		bodyFactory.makeCirclePolyBody(1, 1, 2, BodyFactory.RUBBER);
-		
-		// add a new steel ball at position 4, 1
-		bodyFactory.makeCirclePolyBody(4, 1, 2, BodyFactory.STEEL);
-					
-		// add a new stone at position -4,1
-		bodyFactory.makeCirclePolyBody(-4, 1, 2, BodyFactory.STONE);
-		
-		Vector2[] vertices = new Vector2[3];
-		vertices[0] = new Vector2(0,0);
-		vertices[1] = new Vector2(2,4);
-		vertices[2] = new Vector2(1,6);
-		Body polybody=bodyFactory.makePolygonShapeBody(vertices, -5, 0, BodyFactory.STEEL, BodyType.DynamicBody);
-		bodyFactory.makeConeSensor(polybody, 5);
+			
+		// add a player
+		player = bodyFactory.makeBoxPolyBody(1, 1, 2, 2, BodyFactory.RUBBER, BodyType.DynamicBody,false);
+			
+		// add some water
+		Body water =  bodyFactory.makeBoxPolyBody(1, -8, 40, 15, BodyFactory.RUBBER, BodyType.StaticBody,false);
+		water.setUserData("IAMTHESEA");
+		// make the water a sensor so it doesn't obstruct our player
+		bodyFactory.makeAllFixturesSensors(water);	
 			
 	}
 
-	
+	public boolean pointIntersectsBody(Body body, Vector2 mouseLocation){
+		Vector3 mousePos = new Vector3(mouseLocation,0); //convert mouseLocation to 3D position
+		camera.unproject(mousePos); // convert from screen potition to world position
+		if(body.getFixtureList().first().testPoint(mousePos.x, mousePos.y)){
+			return true;
+		}
+		return false;
+	}
 	
 	public void logicStep(float delta) {
+		if(controller.left){
+			player.applyForceToCenter(-10, 0,true);
+		}if(controller.right){
+			player.applyForceToCenter(10, 0,true);
+		}if(controller.up){
+			player.applyForceToCenter(0, 10,true);
+		}if(controller.down){
+			player.applyForceToCenter(0, -10,true);
+		}
+		if(isSwimming){
+			player.applyForceToCenter(0, 45, true);
+		}
+
+		// check if mouse1 is down (player click) then if true check if point intersects
+		if(controller.isMouse1Down && pointIntersectsBody(player,controller.mouseLocation)){
+			System.out.println("Player was clicked");
+		}
 		world.step(delta,3, 3);
 	}
 	
@@ -123,7 +150,7 @@ public class B2dModel {
 	        // we no longer use the shape object here so dispose of it.
 	        shape.dispose();
 	        
-	        bodyk.setLinearVelocity(0f, 0.75f);
+	        bodyk.setLinearVelocity(0f, 2f);
 	        
 	        
 	}

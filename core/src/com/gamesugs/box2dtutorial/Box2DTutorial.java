@@ -3,6 +3,7 @@ package com.gamesugs.box2dtutorial;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.gamesugs.box2dtutorial.loader.B2dAssetManager;
 import com.gamesugs.box2dtutorial.views.EndScreen;
 import com.gamesugs.box2dtutorial.views.LoadingScreen;
 import com.gamesugs.box2dtutorial.views.MainScreen;
@@ -18,6 +19,7 @@ public class Box2DTutorial extends Game {
 	private MainScreen mainScreen;
 	private EndScreen endScreen;
 	private AppPreferences preferences;
+	public B2dAssetManager assMan = new B2dAssetManager();
 
 	 
 	public final static int MENU = 0;
