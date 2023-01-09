@@ -1,5 +1,6 @@
 package com.gamesugs.box2dtutorial;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -10,9 +11,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.gamesugs.box2dtutorial.controller.KeyboardController;
-
+import com.gamesugs.box2dtutorial.loader.B2dAssetManager;
 public class B2dModel {
 
+	
 	public World world;
 	private Body bodyd;
 	private Body bodys;
@@ -21,16 +23,28 @@ public class B2dModel {
 	public boolean isSwimming = false;
 	private KeyboardController controller;
 	private OrthographicCamera camera;
+	private B2dAssetManager assMan;
+	private Sound ping;
+	private Sound boing;
+	public static final int BOING_SOUND = 0;
+	public static final int PING_SOUND = 1;
 	
-	public B2dModel(KeyboardController contr, OrthographicCamera cam) {
+	public B2dModel(KeyboardController contr, OrthographicCamera cam, B2dAssetManager assetManager) {
 		controller=contr;
 		camera=cam;
+		assMan = assetManager;  // new
+
 		world = new World(new Vector2(0,-10f),true);
 		world.setContactListener(new B2dContactListener(this));
 		createFloor();
-		//createObject();
+//		createObject();
 		//createMovingObject();
-			
+		assMan.queueAddSounds();
+		// tells the asset manager to load the images and wait until finsihed loading.
+		assMan.manager.finishLoading();
+		// loads the 2 sounds we use
+		ping = assMan.manager.get("sounds/ping.wav", Sound.class);
+		boing = assMan.manager.get("sounds/boing.wav", Sound.class);
 		// get our body factory singleton and store it in bodyFactory
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 			
@@ -45,6 +59,17 @@ public class B2dModel {
 			
 	}
 
+	public void playSound(int sound){
+		switch(sound){
+		case BOING_SOUND:
+			boing.play();
+			break;
+		case PING_SOUND:
+			ping.play();
+			break;
+		}
+	}
+	
 	public boolean pointIntersectsBody(Body body, Vector2 mouseLocation){
 		Vector3 mousePos = new Vector3(mouseLocation,0); //convert mouseLocation to 3D position
 		camera.unproject(mousePos); // convert from screen potition to world position
@@ -65,7 +90,7 @@ public class B2dModel {
 			player.applyForceToCenter(0, -10,true);
 		}
 		if(isSwimming){
-			player.applyForceToCenter(0, 45, true);
+			player.applyForceToCenter(0, 40, true);
 		}
 
 		// check if mouse1 is down (player click) then if true check if point intersects

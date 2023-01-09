@@ -1,8 +1,7 @@
 package com.gamesugs.box2dtutorial;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.gamesugs.box2dtutorial.loader.B2dAssetManager;
 import com.gamesugs.box2dtutorial.views.EndScreen;
 import com.gamesugs.box2dtutorial.views.LoadingScreen;
@@ -20,6 +19,7 @@ public class Box2DTutorial extends Game {
 	private EndScreen endScreen;
 	private AppPreferences preferences;
 	public B2dAssetManager assMan = new B2dAssetManager();
+	private Music playingSong;
 
 	 
 	public final static int MENU = 0;
@@ -32,7 +32,22 @@ public class Box2DTutorial extends Game {
 		loadingScreen = new LoadingScreen(this);
 		setScreen(loadingScreen);
 		preferences = new AppPreferences();
+		
+		// tells our asset manger that we want to load the images set in loadImages method
+		assMan.queueAddMusic();
+		// tells the asset manager to load the images and wait until finished loading.
+		assMan.manager.finishLoading();
+		// loads the 2 sounds we use
+		playingSong = assMan.manager.get("music/Rolemusic_pl4y1ng.mp3");
+		playingSong.setVolume(0.5f);
+		playingSong.play();
 
+	}
+	
+	@Override
+	public void dispose(){
+		playingSong.dispose();
+		assMan.manager.dispose();
 	}
 	
 	public void changeScreen(int screen) {

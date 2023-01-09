@@ -16,10 +16,14 @@ public class MenuScreen implements Screen {
 
 	private Box2DTutorial parent; // a field to store our orchestrator
 	private Stage stage;
+	private Skin skin;
 	// our constructor with a Box2DTutorial argument
 	public MenuScreen(Box2DTutorial box2dTutorial){
 		parent = box2dTutorial; // setting the argument to our field.
 		stage = new Stage(new ScreenViewport());
+		parent.assMan.queueAddSkin();  //new
+		parent.assMan.manager.finishLoading(); // new
+		skin = parent.assMan.manager.get("skin/glassy-ui.json"); // new	
 	}
 	
 	@Override
@@ -29,7 +33,6 @@ public class MenuScreen implements Screen {
 		table.setFillParent(true);
 		table.setDebug(false);
 		stage.addActor(table);
-		Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 		TextButton newGame = new TextButton("New Game", skin);
 		TextButton preferences = new TextButton("Preferences", skin);
 		TextButton exit = new TextButton("Exit", skin);

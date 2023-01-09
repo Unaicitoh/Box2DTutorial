@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gamesugs.box2dtutorial.B2dModel;
@@ -18,24 +20,22 @@ public class MainScreen implements Screen {
 	private OrthographicCamera cam;
 	private Box2DDebugRenderer debugRenderer;
 	private KeyboardController controller;
-	private Texture playerTex;
+	private AtlasRegion playerTex;
 	private SpriteBatch sb;
+	private TextureAtlas atlas;
 
 	// our constructor with a Box2DTutorial argument
 	public MainScreen(Box2DTutorial box2dTutorial){
 		parent = box2dTutorial;     // setting the argument to our field.
 		controller = new KeyboardController();
 		cam = new OrthographicCamera(32,24);
-		model = new B2dModel(controller,cam);
+		model = new B2dModel(controller,cam,parent.assMan);
 		sb = new SpriteBatch();
 		sb.setProjectionMatrix(cam.combined);
 		debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
 		// tells our asset manger that we want to load the images set in loadImages method
-		parent.assMan.queueAddImages();
-		// tells the asset manager to load the images and wait until finsihed loading.
-		parent.assMan.manager.finishLoading();
-		// gets the images as a texture
-		playerTex = parent.assMan.manager.get("images/player.png", Texture.class);
+		atlas = parent.assMan.manager.get("images/game.atlas"); // new
+		playerTex = atlas.findRegion("player"); // updated
 	}
 	
 	@Override
